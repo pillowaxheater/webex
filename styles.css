@@ -1,0 +1,155 @@
+:root {
+  --bg: #020307;
+  --panel: #000000;
+  --text: #ffffff;
+  --accent: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  color: var(--text);
+  background: radial-gradient(circle at 20% 20%, #0a1023, transparent 45%),
+    radial-gradient(circle at 80% 80%, #071415, transparent 40%),
+    var(--bg);
+}
+
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+.session-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.session-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.beat-lights {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: -0.4rem;
+}
+
+.beat {
+  width: clamp(0.9rem, 3.4vw, 1.25rem);
+  height: clamp(0.9rem, 3.4vw, 1.25rem);
+  border: 2px solid #ffffff;
+  background: transparent;
+}
+
+.beat.active {
+  background: #ffffff;
+}
+
+.session-time {
+  font-size: clamp(1.5rem, 7vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.95;
+}
+
+.time {
+  width: 100%;
+  max-width: 100vw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.time.main-readout {
+  font-size: clamp(4rem, 24vmin, 13rem);
+  letter-spacing: 0;
+}
+
+.controls {
+  display: flex;
+  gap: 0.8rem;
+  width: min(680px, 100%);
+}
+
+.bpm-controls {
+  justify-content: center;
+  align-items: stretch;
+}
+
+.bpm-top {
+  justify-content: center;
+}
+
+.bpm-tap {
+  width: 65%;
+  max-width: 62%;
+}
+
+.bpm-adjust {
+  width: 30%;
+  max-width: 30%;
+}
+
+.caffeinate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(680px, 100%);
+  min-height: 3.25rem;
+  border: 2px solid #ffffff;
+  border-radius: 0;
+  background: #000000;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 600;
+}
+
+button {
+  flex: 1;
+  min-height: 4.5rem;
+  border: 2px solid #ffffff;
+  border-radius: 0;
+  background: #000000;
+  color: #ffffff;
+  font-size: clamp(1.15rem, 4.5vw, 1.6rem);
+  font-weight: 600;
+}
+
+button:first-child {
+  background: #ffffff;
+  color: #000000;
+}
+
+button:active {
+  transform: scale(0.98);
+}

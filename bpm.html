@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BPM Counter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+      <div class="session-label">BPM</div>
+      <div class="beat-lights" aria-label="Beat indicator">
+        <span class="beat active" data-beat="0"></span>
+        <span class="beat" data-beat="1"></span>
+        <span class="beat" data-beat="2"></span>
+        <span class="beat" data-beat="3"></span>
+      </div>
+      <div id="bpmValue" class="time main-readout" role="status" aria-label="Beats per minute">0</div>
+
+      <div class="controls bpm-top" aria-label="BPM tap control">
+        <button id="tap" class="bpm-tap" type="button">Tap</button>
+      </div>
+      <div class="controls bpm-controls" aria-label="BPM controls">
+        <button id="minus" class="bpm-adjust" type="button">-</button>
+        <button id="plus" class="bpm-adjust" type="button">+</button>
+      </div>
+    </main>
+
+    <script>
+      const bpmValueEl = document.getElementById('bpmValue');
+      const beatEls = Array.from(document.querySelectorAll('.beat'));
+      const tapBtn = document.getElementById('tap');
+      const minusBtn = document.getElementById('minus');
+      const plusBtn = document.getElementById('plus');
+
+      let taps = [];
+      let bpm = 0;
+      let beatStep = 0;
+      let beatIntervalId = null;
+
+      function render() {
+        bpmValueEl.textContent = String(bpm);
+      }
+
+      function renderBeatLights() {
+        beatEls.forEach((el, idx) => {
+          el.classList.toggle('active', idx === beatStep);
+        });
+      }
+
+      function stopBeatCounter() {
+        if (beatIntervalId) {
+          clearInterval(beatIntervalId);
+          beatIntervalId = null;
+        }
+      }
+
+      function restartBeatCounter() {
+        stopBeatCounter();
+        beatStep = 0;
+        renderBeatLights();
+        if (bpm <= 0) return;
+
+        const intervalMs = 60000 / bpm;
+        beatIntervalId = setInterval(() => {
+          beatStep = (beatStep + 1) % 4;
+          renderBeatLights();
+        }, intervalMs);
+      }
+
+      function updateFromTaps() {
+        if (taps.length < 2) {
+          bpm = 0;
+          render();
+          restartBeatCounter();
+          return;
+        }
+
+        const intervals = [];
+        for (let i = 1; i < taps.length; i += 1) {
+          intervals.push(taps[i] - taps[i - 1]);
+        }
+
+        const avgMs = intervals.reduce((sum, n) => sum + n, 0) / intervals.length;
+        bpm = Math.max(1, Math.round(60000 / avgMs));
+        render();
+        restartBeatCounter();
+      }
+
+      function tap() {
+        const now = performance.now();
+
+        if (taps.length > 0 && now - taps[taps.length - 1] > 2500) {
+          taps = [];
+        }
+
+        taps.push(now);
+        if (taps.length > 8) {
+          taps.shift();
+        }
+
+        updateFromTaps();
+      }
+
+      function bump(delta) {
+        bpm = Math.max(0, bpm + delta);
+        taps = [];
+        render();
+        restartBeatCounter();
+      }
+
+      tapBtn.addEventListener('click', tap);
+      minusBtn.addEventListener('click', () => bump(-1));
+      plusBtn.addEventListener('click', () => bump(1));
+
+      window.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+          event.preventDefault();
+          tap();
+        }
+      });
+
+      render();
+      renderBeatLights();
+    </script>
+  </body>
+</html>

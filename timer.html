@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fullscreen Timer</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+      <div id="sessionWrap" class="session-wrap" hidden>
+        <span class="session-label">Session</span>
+        <div id="sessionTime" class="session-time" aria-label="Session elapsed time">00:00</div>
+      </div>
+      <div id="time" class="time main-readout" role="timer" aria-label="Elapsed time">00:00</div>
+      <div class="controls" aria-label="Timer controls">
+        <button id="startPause" type="button">Start</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+    </main>
+
+    <script>
+      const timeEl = document.getElementById('time');
+      const sessionWrapEl = document.getElementById('sessionWrap');
+      const sessionTimeEl = document.getElementById('sessionTime');
+      const startPauseBtn = document.getElementById('startPause');
+      const resetBtn = document.getElementById('reset');
+
+      let elapsedSeconds = 0;
+      let sessionSeconds = 0;
+      let running = false;
+      let alignTimeoutId = null;
+      let intervalId = null;
+      let sessionVisible = false;
+
+      sessionWrapEl.hidden = true;
+
+      function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
+
+      function render() {
+        timeEl.textContent = formatTime(elapsedSeconds);
+        sessionTimeEl.textContent = formatTime(sessionSeconds);
+      }
+
+      function stopTimers() {
+        if (alignTimeoutId) {
+          clearTimeout(alignTimeoutId);
+          alignTimeoutId = null;
+        }
+        if (intervalId) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }
+
+      function tick() {
+        if (!running) return;
+        elapsedSeconds += 1;
+        sessionSeconds += 1;
+        render();
+      }
+
+      function start() {
+        if (running) return;
+        running = true;
+        startPauseBtn.textContent = 'Pause';
+        stopTimers();
+        const delayMs = 1000 - (Date.now() % 1000);
+        alignTimeoutId = setTimeout(() => {
+          tick();
+          intervalId = setInterval(tick, 1000);
+        }, delayMs);
+      }
+
+      function pause() {
+        running = false;
+        startPauseBtn.textContent = 'Start';
+        stopTimers();
+      }
+
+      function reset() {
+        elapsedSeconds = 0;
+        if (!sessionVisible) {
+          sessionVisible = true;
+          sessionWrapEl.hidden = false;
+        }
+        render();
+      }
+
+      startPauseBtn.addEventListener('click', () => {
+        if (running) pause();
+        else start();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        pause();
+        reset();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
