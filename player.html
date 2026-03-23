@@ -245,13 +245,15 @@
 
     .btn-back:hover { color: var(--text); }
 
+    /* padding-top trick: more reliable than aspect-ratio in flex columns */
     .iframe-container {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      padding-top: 56.25%; /* 16:9 */
+      position: relative;
       background: #000;
       border-radius: 10px;
       overflow: hidden;
-      position: relative;
+      flex-shrink: 0;
     }
 
     .iframe-container iframe {
@@ -259,7 +261,7 @@
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      border: none;
+      border: 0;
     }
 
     .player-meta {
@@ -351,7 +353,7 @@
   <!-- ── MAIN SCREEN ───────────────────────────────────── -->
   <div id="main-screen" class="screen active">
     <div class="main-header">
-      <h1>deplatformed</h1>
+      <h1>YT Player</h1>
       <div class="url-row">
         <input id="url-input" type="text" placeholder="Paste YouTube URL..." autocomplete="off" spellcheck="false" />
         <button class="btn-primary" id="load-btn">Load</button>
@@ -431,14 +433,21 @@
     }
 
     // ── oEmbed ────────────────────────────────────────────────────
+    // Two endpoints: YouTube native first, noembed.com as fallback.
+    // noembed.com handles Firefox file:// CORS edge cases.
     async function fetchOEmbed(videoId) {
-      const res = await fetch(
-        `https://www.youtube.com/oembed?url=${encodeURIComponent(
-          'https://www.youtube.com/watch?v=' + videoId
-        )}&format=json`
-      );
-      if (!res.ok) throw new Error(res.status);
-      return res.json();
+      const watchUrl = 'https://www.youtube.com/watch?v=' + videoId;
+      const endpoints = [
+        'https://www.youtube.com/oembed?url=' + encodeURIComponent(watchUrl) + '&format=json',
+        'https://noembed.com/embed?url=' + encodeURIComponent(watchUrl),
+      ];
+      for (const url of endpoints) {
+        try {
+          const r = await fetch(url);
+          if (r.ok) return await r.json();
+        } catch (_) {}
+      }
+      throw new Error('oEmbed unavailable');
     }
 
     function thumbUrl(id) { return `https://img.youtube.com/vi/${id}/mqdefault.jpg`; }
@@ -459,8 +468,8 @@
       f.id = 'yt-iframe';
       // enablejsapi=1 lets the IFrame API attach to this iframe for duration
       f.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&playsinline=1`;
-      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      f.allowFullscreen = true;
+      f.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      f.setAttribute('allowfullscreen', '');
       c.appendChild(f);
     }
 
