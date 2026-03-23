@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YT Player</title>
+  <title>deplatform</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -251,12 +251,16 @@
       background: #000;
       border-radius: 10px;
       overflow: hidden;
+      position: relative;
     }
 
+    /* YouTube IFrame API replaces #yt-player-div with an iframe */
+    #yt-player-div,
     .iframe-container iframe {
+      position: absolute;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
-      display: block;
       border: none;
     }
 
@@ -270,10 +274,27 @@
       line-height: 1.4;
     }
 
+    .player-sub {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
     #player-channel {
       font-size: 0.85rem;
       color: var(--muted);
-      margin-top: 4px;
+    }
+
+    #player-duration {
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-variant-numeric: tabular-nums;
     }
 
     .player-actions {
@@ -361,10 +382,15 @@
     <div class="player-topbar">
       <button class="btn-back" id="back-btn">← Back</button>
     </div>
-    <div class="iframe-container" id="iframe-container"></div>
+    <div class="iframe-container" id="iframe-container">
+      <div id="yt-player-div"></div>
+    </div>
     <div class="player-meta">
       <div id="player-title"></div>
-      <div id="player-channel"></div>
+      <div class="player-sub">
+        <span id="player-channel"></span>
+        <span id="player-duration"></span>
+      </div>
     </div>
     <div class="player-actions">
       <button class="btn-save" id="save-skillset-btn">Save to Skillset</button>
@@ -373,14 +399,33 @@
     </div>
   </div>
 
+  <!-- YouTube IFrame Player API — loaded once, reused across videos -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // ── YouTube IFrame API lifecycle ──────────────────────────────
+    let ytPlayer = null;
+    let ytAPIReady = false;
+    let ytAPIResolvers = [];
+
+    // Called automatically by the YouTube script once it loads
+    window.onYouTubeIframeAPIReady = () => {
+      ytAPIReady = true;
+      ytAPIResolvers.forEach(fn => fn());
+      ytAPIResolvers = [];
+    };
+
+    function waitForAPI() {
+      if (ytAPIReady) return Promise.resolve();
+      return new Promise(resolve => ytAPIResolvers.push(resolve));
+    }
+
     // ── Storage keys ─────────────────────────────────────────────
     const KEYS = { skillset: 'yt_skillset', general: 'yt_general', history: 'yt_history' };
 
     // ── State ─────────────────────────────────────────────────────
-    let currentEntry = null; // VideoEntry being played
+    let currentEntry = null;
 
-    // ── Storage helpers ──────────────────────────────────────────
+    // ── Storage helpers ───────────────────────────────────────────
 
     function load(key) {
       try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
@@ -403,7 +448,7 @@
     }
 
     function prependDeduped(key, entry) {
-      let arr = load(key).filter(e => e.videoId !== entry.videoId);
+      const arr = load(key).filter(e => e.videoId !== entry.videoId);
       arr.unshift(entry);
       save(key, arr);
     }
@@ -416,42 +461,126 @@
 
     function extractVideoId(input) {
       input = (input || '').trim();
-
       const patterns = [
-        // standard: youtube.com/watch?v=ID (any params before v=)
         /(?:youtube\.com|m\.youtube\.com)\/watch\?(?:[^#]*&)?v=([a-zA-Z0-9_-]{11})/,
-        // short: youtu.be/ID
         /youtu\.be\/([a-zA-Z0-9_-]{11})/,
-        // shorts: youtube.com/shorts/ID
         /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
-        // embed: youtube.com/embed/ID
         /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
       ];
-
       for (const p of patterns) {
         const m = input.match(p);
         if (m) return m[1];
       }
-
-      // Bare 11-char ID
       if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
       return null;
     }
 
-    // ── oEmbed fetch ──────────────────────────────────────────────
+    // ── Duration formatting ───────────────────────────────────────
 
-    async function fetchMeta(videoId) {
+    function formatDuration(secs) {
+      secs = Math.floor(secs);
+      const h = Math.floor(secs / 3600);
+      const m = Math.floor((secs % 3600) / 60);
+      const s = secs % 60;
+      if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      return `${m}:${String(s).padStart(2,'0')}`;
+    }
+
+    // ── oEmbed fetch (used for channel name on first load) ────────
+
+    async function fetchOEmbed(videoId) {
       const url = `https://www.youtube.com/oembed?url=${encodeURIComponent(
         `https://www.youtube.com/watch?v=${videoId}`
       )}&format=json`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`oEmbed ${res.status}`);
-      const data = await res.json();
-      return { title: data.title || videoId, channel: data.author_name || '' };
+      return res.json();
     }
 
     function thumbUrl(videoId) {
       return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+    }
+
+    // ── Player: create or reload ──────────────────────────────────
+
+    async function launchPlayer(videoId) {
+      await waitForAPI();
+
+      document.getElementById('player-duration').textContent = '';
+
+      if (ytPlayer) {
+        // Reuse existing player instance — just swap the video
+        ytPlayer.loadVideoById(videoId);
+        return;
+      }
+
+      // First launch: create the player inside #yt-player-div
+      ytPlayer = new YT.Player('yt-player-div', {
+        videoId,
+        playerVars: {
+          autoplay: 1,
+          rel: 0,
+          modestbranding: 1,
+          playsinline: 1,
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+        },
+      });
+    }
+
+    function onPlayerReady(e) {
+      populatePlayerStats(e.target);
+    }
+
+    function onPlayerStateChange(e) {
+      // YT.PlayerState.PLAYING = 1
+      // Re-read stats when a new video starts playing (covers loadVideoById reuse)
+      if (e.data === YT.PlayerState.PLAYING) {
+        populatePlayerStats(e.target);
+      }
+    }
+
+    function populatePlayerStats(player) {
+      try {
+        const data = player.getVideoData();
+        const duration = player.getDuration();
+
+        // Title — player API is authoritative (works for all public videos)
+        if (data && data.title) {
+          document.getElementById('player-title').textContent = data.title;
+          if (currentEntry) {
+            currentEntry.title = data.title;
+            updateEntryInStorage(currentEntry);
+            renderAll();
+          }
+        }
+
+        // Channel name from player data
+        if (data && data.author) {
+          document.getElementById('player-channel').textContent = data.author;
+          if (currentEntry) {
+            currentEntry.channel = data.author;
+            updateEntryInStorage(currentEntry);
+          }
+        }
+
+        // Duration
+        if (duration > 0) {
+          document.getElementById('player-duration').textContent = formatDuration(duration);
+        }
+      } catch (_) {}
+    }
+
+    function destroyPlayer() {
+      if (ytPlayer) {
+        try { ytPlayer.destroy(); } catch (_) {}
+        ytPlayer = null;
+        // Recreate the target div that the API removed
+        const container = document.getElementById('iframe-container');
+        container.innerHTML = '<div id="yt-player-div"></div>';
+      }
     }
 
     // ── Screen switching ──────────────────────────────────────────
@@ -466,12 +595,10 @@
     function renderColumn(listId, entries, listKey) {
       const container = document.getElementById(listId);
       container.innerHTML = '';
-
       if (!entries.length) {
         container.innerHTML = '<div class="column-empty">Empty</div>';
         return;
       }
-
       entries.forEach(entry => {
         const card = document.createElement('div');
         card.className = 'video-card';
@@ -481,8 +608,7 @@
         img.src = entry.thumbnail;
         img.alt = '';
         img.loading = 'lazy';
-        // Fallback if thumbnail fails
-        img.onerror = () => { img.style.background = '#222'; img.src = ''; };
+        img.onerror = () => { img.src = ''; img.style.background = '#222'; };
 
         const meta = document.createElement('div');
         meta.className = 'card-meta';
@@ -504,8 +630,7 @@
         card.appendChild(img);
         card.appendChild(meta);
         card.appendChild(removeBtn);
-
-        card.addEventListener('click', () => openFromEntry(entry, listKey));
+        card.addEventListener('click', () => openFromEntry(entry));
         container.appendChild(card);
       });
     }
@@ -517,59 +642,61 @@
       renderColumn('list-history',  history,  'history');
     }
 
-    // ── Open video ─────────────────────────────────────────────────
+    // ── Open video ────────────────────────────────────────────────
 
     async function openVideo(videoId, existingEntry) {
-      // If we already have metadata (from a card click), use it immediately
-      // Otherwise show player with placeholders and fetch async
       currentEntry = existingEntry || {
         videoId,
-        title: videoId,
+        title: videoId,   // placeholder; overwritten by player onReady
         channel: '',
         thumbnail: thumbUrl(videoId),
         timestamp: Date.now(),
       };
 
-      // Add to history if not in a playlist
+      // Track in history if not already in a playlist
       if (!isInList(KEYS.skillset, videoId) && !isInList(KEYS.general, videoId)) {
         prependDeduped(KEYS.history, { ...currentEntry, timestamp: Date.now() });
       }
 
-      // Switch screen and inject player
       showScreen('player-screen');
-      injectIframe(videoId);
 
-      // Populate meta
-      document.getElementById('player-title').textContent = currentEntry.title;
-      document.getElementById('player-channel').textContent = currentEntry.channel;
-      updateSaveButtons();
+      // Show what we know immediately; player events will fill in the rest
+      document.getElementById('player-title').textContent =
+        existingEntry ? existingEntry.title : 'Loading…';
+      document.getElementById('player-channel').textContent =
+        existingEntry ? existingEntry.channel : '';
+      document.getElementById('player-duration').textContent = '';
       document.getElementById('save-feedback').textContent = '';
+      updateSaveButtons();
 
-      // Fetch better metadata if we don't have a real title yet
-      if (!existingEntry || existingEntry.title === videoId) {
-        try {
-          const meta = await fetchMeta(videoId);
-          currentEntry.title = meta.title;
-          currentEntry.channel = meta.channel;
-          currentEntry.thumbnail = thumbUrl(videoId);
-          document.getElementById('player-title').textContent = meta.title;
-          document.getElementById('player-channel').textContent = meta.channel;
-          // Update stored entry with real title
+      // Launch or reload the YT player
+      await launchPlayer(videoId);
+
+      // Fetch oEmbed in parallel for channel name if we don't have it yet
+      if (!existingEntry) {
+        fetchOEmbed(videoId).then(data => {
+          if (!currentEntry || currentEntry.videoId !== videoId) return;
+          if (data.title && currentEntry.title === videoId) {
+            currentEntry.title = data.title;
+            document.getElementById('player-title').textContent = data.title;
+          }
+          if (data.author_name && !currentEntry.channel) {
+            currentEntry.channel = data.author_name;
+            document.getElementById('player-channel').textContent = data.author_name;
+          }
           updateEntryInStorage(currentEntry);
-        } catch (_) {
-          // Non-fatal — player still works
-        }
+          renderAll();
+        }).catch(() => {});
       }
 
       renderAll();
     }
 
-    function openFromEntry(entry, _listKey) {
+    function openFromEntry(entry) {
       openVideo(entry.videoId, entry);
     }
 
     function updateEntryInStorage(entry) {
-      // Update in whichever lists the entry appears in
       [KEYS.skillset, KEYS.general, KEYS.history].forEach(key => {
         const arr = load(key);
         const idx = arr.findIndex(e => e.videoId === entry.videoId);
@@ -580,31 +707,15 @@
       });
     }
 
-    function injectIframe(videoId) {
-      const container = document.getElementById('iframe-container');
-      container.innerHTML = '';
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframe.allowFullscreen = true;
-      container.appendChild(iframe);
-    }
-
-    function clearIframe() {
-      document.getElementById('iframe-container').innerHTML = '';
-    }
-
-    // ── Save to playlist ───────────────────────────────────────────
+    // ── Save to playlist ──────────────────────────────────────────
 
     function saveToPlaylist(listKey) {
       if (!currentEntry) return;
-      const entry = { ...currentEntry, timestamp: Date.now() };
-      // Remove from history first
-      removeFromList(KEYS.history, entry.videoId);
-      // Add to playlist (deduped)
-      prependDeduped(KEYS[listKey], entry);
+      removeFromList(KEYS.history, currentEntry.videoId);
+      prependDeduped(KEYS[listKey], { ...currentEntry, timestamp: Date.now() });
       updateSaveButtons();
-      document.getElementById('save-feedback').textContent = `Saved to ${listKey.charAt(0).toUpperCase() + listKey.slice(1)}`;
+      const label = listKey === 'skillset' ? 'Skillset' : 'General';
+      document.getElementById('save-feedback').textContent = `Saved to ${label}`;
       setTimeout(() => {
         const fb = document.getElementById('save-feedback');
         if (fb) fb.textContent = '';
@@ -618,7 +729,7 @@
       document.getElementById('save-general-btn').disabled  = isInList(KEYS.general,  currentEntry.videoId);
     }
 
-    // ── URL load flow ──────────────────────────────────────────────
+    // ── URL load flow ─────────────────────────────────────────────
 
     async function handleUrlLoad() {
       const input = document.getElementById('url-input').value;
@@ -635,7 +746,7 @@
       await openVideo(videoId, null);
     }
 
-    // ── Utility ────────────────────────────────────────────────────
+    // ── Utility ───────────────────────────────────────────────────
 
     function escHtml(str) {
       return String(str || '')
@@ -645,26 +756,22 @@
         .replace(/"/g, '&quot;');
     }
 
-    // ── Event listeners ────────────────────────────────────────────
+    // ── Event listeners ───────────────────────────────────────────
 
     document.getElementById('load-btn').addEventListener('click', handleUrlLoad);
-
     document.getElementById('url-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') handleUrlLoad();
     });
-
     document.getElementById('back-btn').addEventListener('click', () => {
-      clearIframe();
+      destroyPlayer();
       currentEntry = null;
       showScreen('main-screen');
       renderAll();
     });
-
     document.getElementById('save-skillset-btn').addEventListener('click', () => saveToPlaylist('skillset'));
     document.getElementById('save-general-btn').addEventListener('click',  () => saveToPlaylist('general'));
 
-    // ── Init ────────────────────────────────────────────────────────
-
+    // ── Init ──────────────────────────────────────────────────────
     renderAll();
   </script>
 </body>
