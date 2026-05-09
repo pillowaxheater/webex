@@ -2,13 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=2,user-scalable=no"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
     <title>BPM Counter</title>
     <link rel="stylesheet" href="./styles.css" />
+    <style>
+      /* Prevent double-tap zoom on the whole page */
+      html { touch-action: manipulation; }
+    </style>
   </head>
   <body>
     <main class="app" aria-live="polite">
-      <div class="session-label">BPM</div>
       <div class="beat-lights" aria-label="Beat indicator">
         <span class="beat active" data-beat="0"></span>
         <span class="beat" data-beat="1"></span>
@@ -18,10 +21,10 @@
       <div id="bpmValue" class="time main-readout" role="status" aria-label="Beats per minute">0</div>
 
       <div class="controls bpm-top" aria-label="BPM tap control">
-        <button id="tap" class="bpm-tap" type="button">Tap</button>
+        <button id="tap" class="bpm-tap btn-primary" type="button">Tap</button>
       </div>
       <div class="controls bpm-controls" aria-label="BPM controls">
-        <button id="minus" class="bpm-adjust" type="button">-</button>
+        <button id="minus" class="bpm-adjust" type="button">−</button>
         <button id="plus" class="bpm-adjust" type="button">+</button>
       </div>
     </main>
