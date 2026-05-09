@@ -15,6 +15,8 @@ html,
 body {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -66,8 +68,8 @@ body {
 
 .session-time {
   font-size: clamp(1.4rem, 6vw, 2.2rem);
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
 
@@ -118,6 +120,8 @@ button {
   font-size: clamp(1.1rem, 4.5vw, 1.5rem);
   font-weight: 600;
   font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   cursor: pointer;
   touch-action: manipulation;
   user-select: none;
