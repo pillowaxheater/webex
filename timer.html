@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
     <title>Fullscreen Timer</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -20,6 +20,8 @@
     </main>
 
     <script>
+      document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
       const timeEl = document.getElementById('time');
       const sessionWrapEl = document.getElementById('sessionWrap');
       const sessionTimeEl = document.getElementById('sessionTime');
