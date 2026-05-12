@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>Sine</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      html { touch-action: manipulation; }
+
+      .hz-wrap {
+        text-align: center;
+        line-height: 1;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .hz-num {
+        font-size: clamp(3.5rem, 20vmin, 11rem);
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        letter-spacing: 0;
+        display: block;
+      }
+
+      .hz-note {
+        font-size: 0.6rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0.28;
+      }
+
+      .freq-wrap {
+        width: min(520px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.18);
+        outline: none;
+        cursor: pointer;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        background: #fff;
+        border: none;
+        cursor: pointer;
+      }
+
+      input[type="number"] {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        font-family: inherit;
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        font-weight: 600;
+        text-align: center;
+        padding: 0.3rem 0;
+        outline: none;
+        -moz-appearance: textfield;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+      }
+
+      .keyboard-wrap {
+        width: min(520px, 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .keyboard {
+        position: relative;
+        width: 100%;
+        height: clamp(65px, 17vw, 105px);
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .white-keys {
+        display: flex;
+        height: 100%;
+        gap: 1px;
+        background: #000;
+      }
+
+      .key-white {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.86);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 0.2rem;
+        font-size: 0.42rem;
+        color: rgba(0, 0, 0, 0.45);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      .key-white.active {
+        background: rgba(255, 255, 255, 0.42);
+      }
+
+      .key-black {
+        position: absolute;
+        top: 0;
+        height: 62%;
+        background: #080808;
+        border-left: 1px solid rgba(255, 255, 255, 0.06);
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        z-index: 1;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      .key-black.active {
+        background: #222;
+      }
+
+      .oct-display {
+        flex: 1;
+        text-align: center;
+        font-size: 0.6rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0.3;
+        font-weight: 600;
+        align-self: center;
+      }
+
+      .oct-btn {
+        flex: none;
+        width: 3.5rem;
+        min-height: 2.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <div class="hz-wrap">
+        <span class="hz-num" id="hzNum">440</span>
+        <span class="hz-note" id="hzNote">A4 · HZ</span>
+      </div>
+
+      <div class="freq-wrap">
+        <input id="freqSlider" type="range" min="0" max="1000" />
+        <input id="freqInput" type="number" min="20" max="20000" value="440" />
+      </div>
+
+      <div class="keyboard-wrap">
+        <div class="keyboard" id="keyboard"></div>
+        <div class="controls">
+          <button class="oct-btn" id="octDown" type="button">−</button>
+          <div class="oct-display" id="octDisplay">OCT 4</div>
+          <button class="oct-btn" id="octUp" type="button">+</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="playStop" class="btn-primary" type="button">Play</button>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener('touchmove', e => {
+        if (e.target.type !== 'range') e.preventDefault();
+      }, { passive: false });
+
+      // ── Audio ──────────────────────────────────────────────────────
+      let audioCtx = null;
+      let osc = null;
+      let gainNode = null;
+      let playing = false;
+
+      function ac() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+      }
+
+      function startTone(f) {
+        const ctx = ac();
+        if (ctx.state === 'suspended') ctx.resume();
+        if (osc) { try { osc.stop(); } catch (_) {} osc.disconnect(); }
+        if (gainNode) gainNode.disconnect();
+        gainNode = ctx.createGain();
+        gainNode.gain.value = 0.4;
+        gainNode.connect(ctx.destination);
+        osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+        osc.connect(gainNode);
+        osc.start();
+        playing = true;
+      }
+
+      function stopTone() {
+        if (!osc) return;
+        const ctx = ac();
+        gainNode.gain.setTargetAtTime(0, ctx.currentTime, 0.02);
+        const o = osc, g = gainNode;
+        setTimeout(() => { try { o.stop(); o.disconnect(); g.disconnect(); } catch (_) {} }, 150);
+        osc = null; gainNode = null;
+        playing = false;
+      }
+
+      function nudgeFreq(f) {
+        if (osc) osc.frequency.setTargetAtTime(f, ac().currentTime, 0.008);
+      }
+
+      // ── Frequency state ────────────────────────────────────────────
+      const FMIN = 20, FMAX = 4000;
+      let freq = 440;
+
+      function toSlider(f) {
+        return Math.log(Math.max(FMIN, Math.min(FMAX, f)) / FMIN) / Math.log(FMAX / FMIN) * 1000;
+      }
+
+      function fromSlider(v) {
+        return FMIN * Math.pow(FMAX / FMIN, v / 1000);
+      }
+
+      const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+      function noteLabel(f) {
+        const midi = Math.round(69 + 12 * Math.log2(f / 440));
+        const oct = Math.floor(midi / 12) - 1;
+        return NOTE_NAMES[((midi % 12) + 12) % 12] + oct;
+      }
+
+      const hzNum = document.getElementById('hzNum');
+      const hzNote = document.getElementById('hzNote');
+      const slider = document.getElementById('freqSlider');
+      const numInput = document.getElementById('freqInput');
+
+      function applyFreq(f, src) {
+        freq = Math.max(1, f);
+        hzNum.textContent = freq < 100 ? freq.toFixed(1) : Math.round(freq);
+        hzNote.textContent = noteLabel(freq) + ' · HZ';
+        if (src !== 'slider') slider.value = toSlider(freq);
+        if (src !== 'input') numInput.value = Math.round(freq);
+        if (playing) nudgeFreq(freq);
+      }
+
+      slider.addEventListener('input', () => applyFreq(fromSlider(+slider.value), 'slider'));
+
+      numInput.addEventListener('change', () => {
+        const v = parseFloat(numInput.value);
+        if (!isNaN(v) && v > 0) applyFreq(v, 'input');
+      });
+
+      numInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { numInput.blur(); applyFreq(parseFloat(numInput.value) || freq, 'input'); }
+      });
+
+      // ── Play/Stop ──────────────────────────────────────────────────
+      const playBtn = document.getElementById('playStop');
+
+      function setPlaying(on) {
+        if (on) {
+          startTone(freq);
+          playBtn.textContent = 'Stop';
+          playBtn.classList.remove('btn-primary');
+        } else {
+          stopTone();
+          playBtn.textContent = 'Play';
+          playBtn.classList.add('btn-primary');
+        }
+      }
+
+      playBtn.addEventListener('click', () => setPlaying(!playing));
+
+      // ── Keyboard ───────────────────────────────────────────────────
+      const WHITE_SEMI  = [0, 2, 4, 5, 7, 9, 11];
+      const WHITE_LABEL = ['C','D','E','F','G','A','B'];
+      const BLACK_KEYS = [
+        { s: 1,  p: 1 },
+        { s: 3,  p: 2 },
+        { s: 6,  p: 4 },
+        { s: 8,  p: 5 },
+        { s: 10, p: 6 },
+      ];
+
+      let octave = 4;
+      let activeKey = null;
+
+      const octDisplay = document.getElementById('octDisplay');
+      const keyboard = document.getElementById('keyboard');
+
+      function midiToFreq(midi) {
+        return 440 * Math.pow(2, (midi - 69) / 12);
+      }
+
+      function pressNote(semi, el) {
+        if (activeKey) activeKey.classList.remove('active');
+        activeKey = el;
+        el.classList.add('active');
+        applyFreq(midiToFreq(12 * (octave + 1) + semi), 'key');
+        if (!playing) setPlaying(true);
+      }
+
+      function buildKeyboard() {
+        keyboard.innerHTML = '';
+
+        const whiteRow = document.createElement('div');
+        whiteRow.className = 'white-keys';
+        WHITE_SEMI.forEach((semi, i) => {
+          const k = document.createElement('div');
+          k.className = 'key-white';
+          k.dataset.semi = semi;
+          k.textContent = WHITE_LABEL[i];
+          k.addEventListener('pointerdown', e => { e.preventDefault(); pressNote(semi, k); });
+          whiteRow.appendChild(k);
+        });
+        keyboard.appendChild(whiteRow);
+
+        const wkW = 100 / 7;
+        const bkW = wkW * 0.62;
+        BLACK_KEYS.forEach(({ s, p }) => {
+          const k = document.createElement('div');
+          k.className = 'key-black';
+          k.dataset.semi = s;
+          k.style.left = `${p * wkW}%`;
+          k.style.width = `${bkW}%`;
+          k.style.transform = 'translateX(-50%)';
+          k.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); pressNote(s, k); });
+          keyboard.appendChild(k);
+        });
+      }
+
+      function setOctave(o) {
+        octave = Math.max(0, Math.min(8, o));
+        octDisplay.textContent = `OCT ${octave}`;
+        if (activeKey) pressNote(+activeKey.dataset.semi, activeKey);
+      }
+
+      document.getElementById('octDown').addEventListener('click', () => setOctave(octave - 1));
+      document.getElementById('octUp').addEventListener('click', () => setOctave(octave + 1));
+
+      // ── Init ───────────────────────────────────────────────────────
+      buildKeyboard();
+      applyFreq(440, null);
+    </script>
+  </body>
+</html>
