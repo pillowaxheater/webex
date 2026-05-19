@@ -30,6 +30,7 @@
 
     <script>
       document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+      document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
 
       const bpmValueEl = document.getElementById('bpmValue');
       const beatEls = Array.from(document.querySelectorAll('.beat'));
