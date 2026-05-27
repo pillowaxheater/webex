@@ -48,13 +48,6 @@
                 object-fit: contain;
                 display: block;
             }
-
-            button:disabled {
-                opacity: 0.2;
-                cursor: not-allowed;
-                background: rgba(255, 255, 255, 0.06);
-                color: #ffffff;
-            }
         </style>
     </head>
     <body>
@@ -63,6 +56,7 @@
                 class="qr-display"
                 id="qrContainer"
                 aria-label="QR Code Display"
+                hidden
             >
                 <!-- QR Code will appear here -->
             </div>
@@ -71,13 +65,18 @@
                 <input
                     type="text"
                     id="qrInput"
-                    placeholder="Enter link or text..."
+                    placeholder="insert link / enter text"
                     autocomplete="off"
                 />
             </div>
 
             <div class="controls" aria-label="QR Code Actions">
-                <button id="downloadBtn" type="button" disabled>
+                <button
+                    id="downloadBtn"
+                    type="button"
+                    class="btn-primary"
+                    hidden
+                >
                     Download PNG
                 </button>
             </div>
@@ -96,8 +95,8 @@
 
                 if (!text) {
                     qrContainer.innerHTML = "";
-                    downloadBtn.disabled = true;
-                    downloadBtn.classList.remove("btn-primary");
+                    qrContainer.hidden = true;
+                    downloadBtn.hidden = true;
                     currentDataUrl = null;
                     return;
                 }
@@ -120,8 +119,8 @@
                         }
                         currentDataUrl = url;
                         qrContainer.innerHTML = `<img src="${url}" alt="QR Code" />`;
-                        downloadBtn.disabled = false;
-                        downloadBtn.classList.add("btn-primary");
+                        qrContainer.hidden = false;
+                        downloadBtn.hidden = false;
                     },
                 );
             }
@@ -135,9 +134,35 @@
             downloadBtn.addEventListener("click", () => {
                 if (!currentDataUrl) return;
 
+                const text = qrInput.value.trim();
+                let namePart = "code";
+                try {
+                    // Attempt to extract the primary domain name for URLs
+                    const url = new URL(text);
+                    const parts = url.hostname
+                        .replace(/^www\./i, "")
+                        .split(".");
+                    namePart =
+                        parts.length > 1 ? parts[parts.length - 2] : parts[0];
+                } catch (e) {
+                    // If not a URL, use a sanitized version of the text
+                    namePart =
+                        text
+                            .replace(/[^a-zA-Z0-9]/g, "-")
+                            .replace(/-+/g, "-")
+                            .substring(0, 15)
+                            .replace(/^-|-$/g, "") || "text";
+                }
+
+                const now = new Date();
+                const dateStr =
+                    String(now.getDate()).padStart(2, "0") +
+                    String(now.getMonth() + 1).padStart(2, "0");
+                const filename = `QR-${namePart}-${dateStr}.png`;
+
                 const link = document.createElement("a");
                 link.href = currentDataUrl;
-                link.download = "qrcode.png";
+                link.download = filename;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
