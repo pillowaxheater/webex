@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>Menu</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: min(520px, 100%);
+      }
+      .menu-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 5rem;
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        transition: background-color 0.2s, color 0.2s;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .menu-link:hover, .menu-link:active {
+        background: #ffffff;
+        color: #000000;
+      }
+      .title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 700;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+      <h1 class="title">Menu</h1>
+      <nav class="menu" aria-label="Main Navigation">
+        <a href="bpm.html" class="menu-link">BPM Counter</a>
+        <a href="player.html" class="menu-link">Player</a>
+        <a href="qr.html" class="menu-link">QR Generator</a>
+        <a href="sine.html" class="menu-link">Sine</a>
+        <a href="timer.html" class="menu-link">Timer</a>
+        <a href="warp.html" class="menu-link">Warp</a>
+      </nav>
+    </main>
+  </body>
+</html>
