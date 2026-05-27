@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .qr-input-container {
+        display: flex;
+        width: min(520px, 100%);
+      }
+
+      input[type="url"], input[type="text"] {
+        flex: 1;
+        min-height: 5rem;
+        border: none;
+        border-radius: 0;
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+        font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+        font-family: inherit;
+        padding: 0 1.5rem;
+        outline: none;
+        text-align: center;
+      }
+
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .qr-display {
+        width: min(320px, 80vw);
+        height: min(320px, 80vw);
+        background: rgba(255, 255, 255, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .qr-display img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      button:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app" aria-live="polite">
+
+      <div class="qr-display" id="qrContainer" aria-label="QR Code Display">
+        <!-- QR Code will appear here -->
+      </div>
+
+      <div class="qr-input-container" aria-label="QR Code Input">
+        <input type="text" id="qrInput" placeholder="Enter link or text..." autocomplete="off" />
+      </div>
+
+      <div class="controls" aria-label="QR Code Actions">
+        <button id="downloadBtn" type="button" disabled>Download PNG</button>
+      </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script>
+      const qrInput = document.getElementById('qrInput');
+      const qrContainer = document.getElementById('qrContainer');
+      const downloadBtn = document.getElementById('downloadBtn');
+
+      let currentDataUrl = null;
+
+      function generateQR() {
+        const text = qrInput.value.trim();
+
+        if (!text) {
+          qrContainer.innerHTML = '';
+          downloadBtn.disabled = true;
+          downloadBtn.classList.remove('btn-primary');
+          currentDataUrl = null;
+          return;
+        }
+
+        // Generate high-res QR code
+        QRCode.toDataURL(text, {
+          width: 1024,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#ffffff'
+          }
+        }, (err, url) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          currentDataUrl = url;
+          qrContainer.innerHTML = `<img src="${url}" alt="QR Code" />`;
+          downloadBtn.disabled = false;
+          downloadBtn.classList.add('btn-primary');
+        });
+      }
+
+      let timeout;
+      qrInput.addEventListener('input', () => {
+        clearTimeout(timeout);
+        timeout = setTimeout(generateQR, 250);
+      });
+
+      downloadBtn.addEventListener('click', () => {
+        if (!currentDataUrl) return;
+
+        const link = document.createElement('a');
+        link.href = currentDataUrl;
+        link.download = 'qrcode.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    </script>
+  </body>
+</html>
