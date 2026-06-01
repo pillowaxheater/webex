@@ -3,7 +3,7 @@
     --fg: #000;
     --accent: #000;
     --dim: rgba(0, 0, 0, 0.45);
-    --border: rgba(0, 0, 0, 0.06);
+    --border: rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -30,8 +30,12 @@ body {
     letter-spacing: -0.01em;
 }
 
-a {
-    color: inherit;
+/* Force all links to stay black */
+a,
+a:visited,
+a:active,
+a:hover {
+    color: #000 !important;
     text-decoration: none;
 }
 
@@ -57,7 +61,7 @@ h3 {
 }
 
 h1 {
-    font-size: clamp(2rem, 10vw, 4rem);
+    font-size: clamp(2rem, 10vw, 4.5rem);
     margin-bottom: 1rem;
 }
 
@@ -86,7 +90,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    mix-blend-mode: multiply; /* Dissolve white parts into background */
+    mix-blend-mode: multiply;
 }
 
 .hero-img {
@@ -115,7 +119,7 @@ h2 {
 .btn-ticket {
     display: inline-block;
     background: var(--accent);
-    color: #fff;
+    color: #fff !important;
     padding: 1.25rem 3rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -124,47 +128,41 @@ h2 {
     transition: transform 0.2s;
 }
 
-.btn-ticket:active {
-    transform: scale(0.98);
-}
-
 .about {
-    max-width: 600px;
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.about p {
-    margin-bottom: 2rem;
+.about-item {
+    margin-bottom: 3rem;
+}
+
+.about-item p {
     font-size: 1.2rem;
     font-weight: 500;
 }
 
-.about .label {
+.about-item .label {
     color: var(--dim);
-    text-transform: uppercase;
-    font-size: 0.6rem;
+    text-transform: lowercase;
+    font-size: 0.8rem;
     display: block;
-    margin-bottom: 0.4rem;
-    letter-spacing: 0.2em;
+    margin-bottom: 0.75rem;
     font-weight: 700;
 }
 
-.keywords {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    margin-top: 4rem;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--dim);
-    font-weight: 600;
+.about-item .label::before {
+    content: "[";
+}
+.about-item .label::after {
+    content: "]";
 }
 
 /* ── Schedule ────────────────────────────────────────────────── */
 .schedule {
     padding: 0;
+    max-width: 100%;
 }
 
 .schedule-container {
@@ -172,8 +170,8 @@ h2 {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    gap: 4rem; /* More space between days on mobile */
-    padding: 0 2rem 2rem;
+    gap: 6rem;
+    padding: 0 1.5rem 2rem;
     scrollbar-width: none;
 }
 
@@ -182,9 +180,8 @@ h2 {
 }
 
 .schedule-day {
-    flex: 0 0 calc(100vw - 4rem);
+    flex: 0 0 calc(100vw - 3rem);
     scroll-snap-align: center;
-    text-align: left;
 }
 
 .schedule-day h3 {
@@ -206,6 +203,10 @@ h2 {
     gap: 1.5rem;
     margin-bottom: 1.25rem;
     align-items: baseline;
+}
+
+.event.first {
+    margin-top: 2rem;
 }
 
 .event .time {
@@ -240,12 +241,18 @@ h2 {
 }
 
 @media (min-width: 1024px) {
+    .schedule {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
     .schedule-container {
         overflow-x: visible;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 4rem 2rem;
+        gap: 5rem 3rem;
         padding: 0;
+        width: 100%;
     }
     .schedule-day {
         flex: none;
@@ -256,69 +263,39 @@ h2 {
     }
 }
 
-/* ── Audio Spa ─────────────────────────────────────────────── */
-.audio-spa {
-    max-width: 600px;
+/* ── Audio & Films ─────────────────────────────────────────────── */
+.list-section {
+    max-width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.audio-spa-artists {
-    margin: 3rem 0;
-}
-
-.artist {
-    margin-bottom: 2.5rem;
-}
-
-.artist-name {
-    font-weight: 800;
-    display: block;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
-}
-
-.artist-desc {
-    font-size: 0.8rem;
-    color: var(--dim);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-}
-
-/* ── Films ─────────────────────────────────────────────────── */
-.films {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.films-list {
+.item-list {
     list-style: none;
 }
 
-.film {
-    margin-bottom: 2.5rem;
+.list-item {
+    margin-bottom: 3rem;
 }
 
-.film-title {
+.list-item-title {
     font-weight: 800;
     display: block;
     line-height: 1.2;
     text-transform: uppercase;
-    font-size: 1rem;
+    font-size: 1.1rem;
     text-decoration: underline;
-    text-underline-offset: 3px;
+    text-underline-offset: 4px;
     text-decoration-thickness: 1px;
 }
 
-.film-desc {
+.list-item-desc {
     font-size: 0.8rem;
     color: var(--dim);
-    margin-top: 0.4rem;
-    font-weight: 500;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 footer {
@@ -335,10 +312,4 @@ footer {
 .footer-contacts {
     margin-bottom: 1.5rem;
     color: var(--fg);
-}
-
-@media (min-width: 601px) {
-    .hero {
-        padding-top: 6rem;
-    }
 }
