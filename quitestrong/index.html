@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фестиваль Тихая сила</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- SVG Filter for pure black & white threshold -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true">
+        <filter id="threshold">
+            <!-- Grayscale conversion -->
+            <feColorMatrix type="matrix" values="0.3333 0.3333 0.3333 0 0
+                                                 0.3333 0.3333 0.3333 0 0
+                                                 0.3333 0.3333 0.3333 0 0
+                                                 0      0      0      1 0"/>
+            <!-- Thresholding -->
+            <feComponentTransfer>
+                <feFuncR type="discrete" tableValues="0 1"/>
+                <feFuncG type="discrete" tableValues="0 1"/>
+                <feFuncB type="discrete" tableValues="0 1"/>
+            </feComponentTransfer>
+        </filter>
+    </svg>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-img-wrap">
+                <img src="hero.jpg" alt="" class="hero-img">
+            </div>
+            <h1>Тихая сила</h1>
+            <span class="dates">21-27 06 2026</span>
+            <span class="tagline">пространство качественного состояния</span>
+            <a href="#" class="btn-ticket">купить билет</a>
+        </section>
+
+        <section class="about" id="about">
+            <h2>02. о чем</h2>
+            <div>
+                <span class="label">восстановление</span>
+                <p>восстановление нервной системы</p>
+
+                <span class="label">зачем</span>
+                <p>трансплантация знаний о навыках саморегуляции и интеграция их в жизнь</p>
+
+                <span class="label">исследование</span>
+                <p>исследование ответов на вечные вопросы мироздания</p>
+
+                <span class="label">проживание</span>
+                <p>коллективное проживание благостного опыта</p>
+            </div>
+
+            <div class="keywords">
+                <span>внимание</span> <span>дыхание</span> <span>энергия</span>
+                <span>качество состояния</span> <span>тело</span> <span>контакт с собой</span>
+                <span>честность</span> <span>ясность</span> <span>психологическая устойчивость</span>
+            </div>
+        </section>
+
+        <section class="schedule" id="schedule">
+            <h2>03. расписание</h2>
+
+            <div class="schedule-day">
+                <h3>вводный день</h3>
+                <div class="event"><span class="time">14:00</span> <span class="desc">чай + лекции и демо практики</span></div>
+                <div class="event"><span class="time">17:00</span> <span class="desc">глубокое слушание</span></div>
+                <div class="event"><span class="time">20:00</span> <span class="desc">Пробуждение жизни (1ч40м)</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">конец</span></div>
+            </div>
+
+            <div class="schedule-day">
+                <h3>полное погружение (тип 1)</h3>
+                <div class="event"><span class="time">09:00</span> <span class="desc">китайский чай + зарядка</span></div>
+                <div class="event"><span class="time">09:45</span> <span class="desc">пранаяма + медитация</span></div>
+                <div class="event"><span class="time">11:00</span> <span class="desc">обливания + гвозди + завтрак</span></div>
+                <div class="event"><span class="time">12:00</span> <span class="desc">обучение</span></div>
+                <div class="event"><span class="time">15:00</span> <span class="desc">буфет</span></div>
+                <div class="event"><span class="time">16:00</span> <span class="desc">игра портал</span></div>
+                <div class="event"><span class="time">19:00</span> <span class="desc">ужин / какао церемония воркшоп</span></div>
+                <div class="event"><span class="time">20:30</span> <span class="desc">Великие йоги тибета (1 ч 16м)</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">расход</span></div>
+            </div>
+
+            <div class="schedule-day">
+                <h3>полное погружение (тип 2)</h3>
+                <div class="event"><span class="time">09:00</span> <span class="desc">чай + зарядка</span></div>
+                <div class="event"><span class="time">09:45</span> <span class="desc">пранаяма + медитация</span></div>
+                <div class="event"><span class="time">11:00</span> <span class="desc">обливания + гвозди + завтрак</span></div>
+                <div class="event"><span class="time">12:00</span> <span class="desc">обучение</span></div>
+                <div class="event"><span class="time">15:00</span> <span class="desc">буфет</span></div>
+                <div class="event"><span class="time">16:00</span> <span class="desc">лес / практика молчания и созерцания</span></div>
+                <div class="event"><span class="time">20:00</span> <span class="desc">пранаяма + медитация на закате</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">расход</span></div>
+            </div>
+
+            <div class="schedule-day">
+                <h3>выходной ретрит</h3>
+                <div class="event"><span class="time">16:00</span> <span class="desc">какао + лекция про цифровой детокс</span></div>
+                <div class="event"><span class="time">17:00</span> <span class="desc">практика глубокого слушания</span></div>
+                <div class="event"><span class="time">20:00</span> <span class="desc">Кояанискаци (1 ч 27 м)</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">чай + пранаяма + медитация у костра</span></div>
+                <div class="event"><span class="time">00:00</span> <span class="desc">расход</span></div>
+            </div>
+
+            <div class="schedule-day">
+                <h3>финальный день ретрита</h3>
+                <div class="event"><span class="time">09:00</span> <span class="desc">чай + зарядка</span></div>
+                <div class="event"><span class="time">09:45</span> <span class="desc">пранаяма + медитация</span></div>
+                <div class="event"><span class="time">11:00</span> <span class="desc">обливания + гвозди + завтрак</span></div>
+                <div class="event"><span class="time">12:00</span> <span class="desc">практики</span></div>
+                <div class="event"><span class="time">17:00</span> <span class="desc">глубокое слушание</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">Международный центр счастливых людей (1 ч 17 м)</span></div>
+                <div class="event"><span class="time">00:00</span> <span class="desc">конец</span></div>
+            </div>
+
+            <div class="schedule-day">
+                <h3>трибал ритуал</h3>
+                <div class="event"><span class="time">17:00</span> <span class="desc">глубокое слушание</span></div>
+                <div class="event"><span class="time">22:00</span> <span class="desc">Международный центр счастливых людей (1 ч 17 м)</span></div>
+                <div class="event"><span class="time">00:00</span> <span class="desc">конец</span></div>
+            </div>
+        </section>
+
+        <section class="audio-spa" id="audio-spa">
+            <h2>04. аудиальный спа</h2>
+            <p style="margin-bottom: 2rem;">практика глубокого слушания</p>
+
+            <div class="audio-spa-artists">
+                <div class="artist">
+                    <span class="artist-name">m23</span>
+                    <span class="artist-desc">загадочно-шумовое, восточные сказки и пост-панк</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">marina bibik</span>
+                    <span class="artist-desc">личный нарратив от шаманского и эмбиента до взрывного глэма</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">mind elsewhere</span>
+                    <span class="artist-desc">этно–фанк, архаично-академические эксперименты</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">backtodaroots</span>
+                    <span class="artist-desc">аналоговый регги-джаз c речитативом</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">shaggy</span>
+                    <span class="artist-desc">кассеты, diy синтезаторы, филд рекординг</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">step rock</span>
+                    <span class="artist-desc">в саду – бонго и джембе, пандейро и флейта, варган</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">pank</span>
+                    <span class="artist-desc">глитчи басс и брейк, лоу-фи с элементами хоррора</span>
+                </div>
+                <div class="artist">
+                    <span class="artist-name">yasya</span>
+                    <span class="artist-desc">дроун нойз</span>
+                </div>
+            </div>
+
+            <p class="tagline">трибал, нойз, пост-клаб. новая эра – эксперименты на тему племенного уклада в техногенном мире</p>
+        </section>
+
+        <section class="films" id="films">
+            <h2>05. фильмы</h2>
+            <ul class="films-list">
+                <li class="film">
+                    <span class="film-title">Пробуждение жизни (Waking Life)</span>
+                    <span class="film-desc">философская притча Ричарда Линклейтера, 2001</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Святая гора (La montaña sagrada)</span>
+                    <span class="film-desc">сюрреалистическая фантастика с элементами психоделики Алехандро Ходоровски, 1973</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Великие йоги тибета (The Yogis of Tibet)</span>
+                    <span class="film-desc">документальный фильм студии JEHM film, 2002</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Дыхание Богов (Er atmende Gott)</span>
+                    <span class="film-desc">путешествие к истокам современной йоги, Ян Шмидт-Гарре, 2012</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">В поисках Древнего Тибета (Auf der Suche nach dem alten Tibet)</span>
+                    <span class="film-desc">документальный, Томас Шмидт, 2010</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Законы солнца (Taiyou no Hou)</span>
+                    <span class="film-desc">японский мультфильм студии Group TAC, 2000</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Сияющая луна (Brilliant Moon)</span>
+                    <span class="film-desc">документальный фильм про Дилго Кхьенце Ринпоче, 2010</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Трилогия Каци (Koyaanisqatsi, Naqoyqatsi, Powaqqatsi)</span>
+                    <span class="film-desc">документальная трилогия Годфри Реджио про природу и технологии</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Синтетические удовольствия (Synthetic Pleasures)</span>
+                    <span class="film-desc">документальный фильм про биотехнологии и виртуальную реальность Иары Ли, 1996</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Без солнца (Sans Soleil)</span>
+                    <span class="film-desc">документальный фильм-эссе про человечество, Крис Маркер, 1982</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Самсара (Samsara)</span>
+                    <span class="film-desc">документальный видовой философский фильм Рона Фрике, 2011</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Барака (Baraka)</span>
+                    <span class="film-desc">кино музыкальное эссе Рона Фрике, 1992</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Международный центр счастливых людей (Lucky People Center International)</span>
+                    <span class="film-desc">1998, документальный, музыка, Швеция</span>
+                </li>
+                <li class="film">
+                    <span class="film-title">Бойцовский клуб (Fight Club)</span>
+                    <span class="film-desc">психологический анархистский триллер Дэвида Финчера, 1999</span>
+                </li>
+            </ul>
+        </section>
+
+        <footer>
+            <a href="#" class="btn-ticket">купить билет</a>
+        </footer>
+    </main>
+</body>
+</html>
