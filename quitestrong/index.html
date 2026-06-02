@@ -3,522 +3,473 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Тихая сила</title>
+        <title>тихая сила</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
         />
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <svg style="width: 0; height: 0; position: absolute" aria-hidden="true">
-            <filter id="threshold">
-                <feColorMatrix
-                    type="matrix"
-                    values="0.3333 0.3333 0.3333 0 0
-                                                 0.3333 0.3333 0.3333 0 0
-                                                 0.3333 0.3333 0.3333 0 0
-                                                 0      0      0      1 0"
-                />
-                <feComponentTransfer>
-                    <feFuncR type="discrete" tableValues="1 0" />
-                    <feFuncG type="discrete" tableValues="1 0" />
-                    <feFuncB type="discrete" tableValues="1 0" />
-                </feComponentTransfer>
-            </filter>
-        </svg>
+        <main class="landing">
+            <div class="poster-wrap">
+                <img src="hero.png" alt="тихая сила" class="poster" />
+            </div>
 
-        <main>
-            <section class="hero" id="hero">
-                <div class="hero-img-wrap">
-                    <img src="hero.png" alt="" class="hero-img" />
-                </div>
-                <h1>Тихая сила</h1>
-                <span class="dates">21—27 06 2026</span>
-                <span class="tagline"
-                    >пространство качественного состояния</span
+            <div class="description-block">
+                <p>
+                    это не актуальная информация<br />
+                    я позвонила уточнила еще раз - комиссия там только с меня
+                    10%. и через личный кабинет я могу настроить цену на эти 10%
+                    больше для покупателя либо оставить на себя.
+                </p>
+            </div>
+
+            <nav class="action-links">
+                <button class="nav-link" onclick="openModal('modal-tickets')">
+                    билеты
+                </button>
+                <a
+                    href="https://instagram.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="nav-link"
+                    >локация</a
                 >
-                <a href="#" class="btn-ticket">купить билет</a>
-            </section>
-
-            <section class="about" id="about">
-                <div class="about-item">
-                    <span class="label">о чем</span>
-                    <p>восстановление нервной системы</p>
-                </div>
-
-                <div class="about-item">
-                    <span class="label">зачем</span>
-                    <p>
-                        трансплантация знаний о навыках саморегуляции и
-                        интеграция их в жизнь
-                    </p>
-                    <p>исследование ответов на вечные вопросы мироздания</p>
-                    <p>коллективное проживание благостного опыта</p>
-                </div>
-
-                <div class="about-item">
-                    <span class="label">ключевые понятия</span>
-                    <p>
-                        внимание, дыхание, энергия, качество состояния, тело,
-                        контакт с собой, честность, ясность, психологическая
-                        устойчивость
-                    </p>
-                </div>
-            </section>
-
-            <section class="schedule" id="schedule">
-                <h2>расписание</h2>
-                <div class="schedule-container" id="scheduleContainer">
-                    <div class="schedule-day">
-                        <span class="date-label">21.06</span>
-                        <h3>вводный день</h3>
-                        <div class="event first">
-                            <span class="time">14:00</span>
-                            <span class="desc"
-                                >чай + лекции и демо практики</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">17:00</span>
-                            <span class="desc">глубокое слушание</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">20:00</span>
-                            <span class="desc">Пробуждение жизни (1ч40м)</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc">конец</span>
-                        </div>
-                    </div>
-
-                    <div class="schedule-day">
-                        <span class="date-label">22.06</span>
-                        <h3>полное погружение</h3>
-                        <div class="event first">
-                            <span class="time">09:00</span>
-                            <span class="desc">китайский чай + зарядка</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">09:45</span>
-                            <span class="desc">пранаяма + медитация</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">11:00</span>
-                            <span class="desc"
-                                >обливания + гвозди + завтрак</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">12:00</span>
-                            <span class="desc">обучение</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">15:00</span>
-                            <span class="desc">буфет</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">16:00</span>
-                            <span class="desc">игра портал</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">19:00</span>
-                            <span class="desc"
-                                >ужин / какао церемония воркшоп</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">20:30</span>
-                            <span class="desc">Великие йоги тибета</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc">расход</span>
-                        </div>
-                    </div>
-
-                    <div class="schedule-day">
-                        <span class="date-label">23.06</span>
-                        <h3>полное погружение</h3>
-                        <div class="event first">
-                            <span class="time">09:00</span>
-                            <span class="desc">чай + зарядка</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">09:45</span>
-                            <span class="desc">пранаяма + медитация</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">11:00</span>
-                            <span class="desc"
-                                >обливания + гвозди + завтрак</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">12:00</span>
-                            <span class="desc">обучение</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">15:00</span>
-                            <span class="desc">буфет</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">16:00</span>
-                            <span class="desc"
-                                >лес / практика молчания и созерцания</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">20:00</span>
-                            <span class="desc"
-                                >пранаяма + медитация на закате</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc">расход</span>
-                        </div>
-                    </div>
-
-                    <div class="schedule-day">
-                        <span class="date-label">24.06</span>
-                        <h3>выходной ретрит</h3>
-                        <div class="event first">
-                            <span class="time">16:00</span>
-                            <span class="desc"
-                                >какао + лекция про цифровой детокс</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">17:00</span>
-                            <span class="desc"
-                                >практика глубокого слушания</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">20:00</span>
-                            <span class="desc">Кояанискаци (1 ч 27 м)</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc"
-                                >чай + пранаяма + медитация у костра</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">00:00</span>
-                            <span class="desc">расход</span>
-                        </div>
-                    </div>
-
-                    <div class="schedule-day">
-                        <span class="date-label">25.06</span>
-                        <h3>ретрит день 2</h3>
-                        <div class="event first">
-                            <span class="time">09:00</span>
-                            <span class="desc">чай + зарядка</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">09:45</span>
-                            <span class="desc">пранаяма + медитация</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">11:00</span>
-                            <span class="desc"
-                                >обливания + гвозди + завтрак</span
-                            >
-                        </div>
-                        <div class="event">
-                            <span class="time">12:00</span>
-                            <span class="desc">практики</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">17:00</span>
-                            <span class="desc">глубокое слушание</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc">МЦСЛ (1 ч 17 м)</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">00:00</span>
-                            <span class="desc">конец</span>
-                        </div>
-                    </div>
-
-                    <div class="schedule-day">
-                        <span class="date-label">26.06</span>
-                        <h3>трибал ритуал</h3>
-                        <div class="event first">
-                            <span class="time">17:00</span>
-                            <span class="desc">глубокое слушание</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">22:00</span>
-                            <span class="desc">МЦСЛ (1 ч 17 м)</span>
-                        </div>
-                        <div class="event">
-                            <span class="time">00:00</span>
-                            <span class="desc">конец</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="schedule-nav">
-                    <button class="nav-btn" id="prevDay">←</button>
-                    <button class="nav-btn" id="nextDay">→</button>
-                </div>
-            </section>
-
-            <section class="list-section" id="audio-spa">
-                <h2>аудиальный спа</h2>
-                <ul class="item-list">
-                    <li class="list-item">
-                        <span class="list-item-title">m23</span>
-                        <span class="list-item-desc"
-                            >загадочно-шумовое, восточные сказки и
-                            пост-панк</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">marina bibik</span>
-                        <span class="list-item-desc"
-                            >личный нарратив от шаманского до эмбиента</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">mind elsewhere</span>
-                        <span class="list-item-desc"
-                            >этно–фанк, архаично-академические
-                            эксперименты</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">backtodaroots</span>
-                        <span class="list-item-desc"
-                            >аналоговый регги-джаз c речитативом</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">shaggy</span>
-                        <span class="list-item-desc"
-                            >кассеты, diy синтезаторы, филд рекординг</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">step rock</span>
-                        <span class="list-item-desc"
-                            >бонго и джембе, пандейро и флейта, варган</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">pank</span>
-                        <span class="list-item-desc"
-                            >глитчи басс и брейк, лоу-фи с элементами
-                            хоррора</span
-                        >
-                    </li>
-                    <li class="list-item">
-                        <span class="list-item-title">yasya</span>
-                        <span class="list-item-desc">дроун нойз</span>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="list-section" id="films">
-                <h2>фильмы</h2>
-                <ul class="item-list">
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0243017/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Пробуждение жизни (Waking Life)</span
-                            >
-                            <span class="list-item-desc"
-                                >Ричард Линклейтер, 2001</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0071853/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Святая гора (The Holy Mountain)</span
-                            >
-                            <span class="list-item-desc"
-                                >Алехандро Ходоровски, 1973</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0358300/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Великие йоги тибета (The Yogis of Tibet)</span
-                            >
-                            <span class="list-item-desc">JEHM film, 2002</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt2126496/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Дыхание Богов (Breath of the Gods)</span
-                            >
-                            <span class="list-item-desc"
-                                >Ян Шмидт-Гарре, 2012</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt1342971/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >В поисках Древнего Тибета</span
-                            >
-                            <span class="list-item-desc"
-                                >Томас Шмидт, 2010</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0274152/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Законы солнца (The Laws of the Sun)</span
-                            >
-                            <span class="list-item-desc">Group TAC, 2000</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt1701977/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Сияющая луна (Brilliant Moon)</span
-                            >
-                            <span class="list-item-desc"
-                                >Дилго Кхьенце Ринпоче, 2010</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0085809/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Кояанискаци (Koyaanisqatsi)</span
-                            >
-                            <span class="list-item-desc"
-                                >Годфри Реджио, 1982</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0114589/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Синтетические удовольствия</span
-                            >
-                            <span class="list-item-desc">Иара Ли, 1996</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0084628/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Без солнца (Sans Soleil)</span
-                            >
-                            <span class="list-item-desc"
-                                >Крис Маркер, 1982</span
-                            >
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0770802/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Самсара (Samsara)</span
-                            >
-                            <span class="list-item-desc">Рон Фрике, 2011</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0103767/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title">Барака (Baraka)</span>
-                            <span class="list-item-desc">Рон Фрике, 1992</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0141566/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >МЦСЛ (Lucky People Center)</span
-                            >
-                            <span class="list-item-desc">1998, Швеция</span>
-                        </a>
-                    </li>
-                    <li class="list-item">
-                        <a
-                            href="https://www.imdb.com/title/tt0137523/"
-                            target="_blank"
-                        >
-                            <span class="list-item-title"
-                                >Бойцовский клуб (Fight Club)</span
-                            >
-                            <span class="list-item-desc"
-                                >Дэвид Финчер, 1999</span
-                            >
-                        </a>
-                    </li>
-                </ul>
-            </section>
-
-            <footer>
-                <div class="footer-contacts">контакты: блабла</div>
-                <div>p (c) 26</div>
-            </footer>
+                <button class="nav-link" onclick="openModal('modal-program')">
+                    программа
+                </button>
+            </nav>
         </main>
 
+        <!-- Modal: Tickets -->
+        <div class="modal-overlay" id="modal-tickets">
+            <div class="modal-content modal-large">
+                <button class="close-btn" onclick="closeModal('modal-tickets')">
+                    ✕
+                </button>
+                <div class="tickets-grid">
+                    <div class="ticket-col">
+                        <h3>полное погружение</h3>
+                        <span class="schedule-label">пример расписания:</span>
+                        <ul class="ticket-schedule">
+                            <li>
+                                <span class="time">09:00</span>
+                                <span class="desc">чай + зарядка</span>
+                            </li>
+                            <li>
+                                <span class="time">09:45</span>
+                                <span class="desc">пранаяма + медитация</span>
+                            </li>
+                            <li>
+                                <span class="time">11:00</span>
+                                <span class="desc"
+                                    >обливания + гвозди + завтрак</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">12:00</span>
+                                <span class="desc">обучение</span>
+                            </li>
+                            <li>
+                                <span class="time">15:00</span>
+                                <span class="desc">буфет</span>
+                            </li>
+                            <li>
+                                <span class="time">16:00</span>
+                                <span class="desc"
+                                    >лес / практика молчания и созерцания</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">20:00</span>
+                                <span class="desc"
+                                    >пранаяма + медитация на закате</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">22:00</span>
+                                <span class="desc">расход</span>
+                            </li>
+                        </ul>
+                        <a
+                            href="https://prodamus.ru/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="buy-btn"
+                            >купить билет (5000р)</a
+                        >
+                    </div>
+
+                    <div class="ticket-col">
+                        <h3>выходной ретрит</h3>
+                        <span class="schedule-label">пример расписания:</span>
+                        <ul class="ticket-schedule">
+                            <li>
+                                <span class="time">16:00</span>
+                                <span class="desc"
+                                    >какао + лекция про цифровой детокс</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">17:00</span>
+                                <span class="desc"
+                                    >практика глубокого слушания</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">20:00</span>
+                                <span class="desc">Кояанискаци (1 ч 27 м)</span>
+                            </li>
+                            <li>
+                                <span class="time">22:00</span>
+                                <span class="desc"
+                                    >чай + пранаяма + медитация у костра</span
+                                >
+                            </li>
+                            <li>
+                                <span class="time">00:00</span>
+                                <span class="desc">расход</span>
+                            </li>
+                        </ul>
+                        <a
+                            href="https://prodamus.ru/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="buy-btn"
+                            >купить билет (2000р)</a
+                        >
+                    </div>
+
+                    <div class="ticket-col">
+                        <h3>вечеринка</h3>
+                        <span class="schedule-label">пример расписания:</span>
+                        <ul class="ticket-schedule">
+                            <li>
+                                <span class="time">17:00</span>
+                                <span class="desc">глубокое слушание</span>
+                            </li>
+                            <li>
+                                <span class="time">22:00</span>
+                                <span class="desc">МЦСЛ (1 ч 17 м)</span>
+                            </li>
+                            <li>
+                                <span class="time">00:00</span>
+                                <span class="desc">конец</span>
+                            </li>
+                        </ul>
+                        <a
+                            href="https://prodamus.ru/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="buy-btn"
+                            >купить билет (1000р)</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Program -->
+        <div class="modal-overlay" id="modal-program">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('modal-program')">
+                    ✕
+                </button>
+                <div class="program-content">
+                    <section class="list-section" id="audio-spa">
+                        <h2>аудиальный спа</h2>
+                        <ul class="item-list">
+                            <li class="list-item">
+                                <span class="list-item-title">m23</span>
+                                <span class="list-item-desc"
+                                    >загадочно-шумовое, восточные сказки и
+                                    пост-панк</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title"
+                                    >marina bibik</span
+                                >
+                                <span class="list-item-desc"
+                                    >личный нарратив от шаманского до
+                                    эмбиента</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title"
+                                    >mind elsewhere</span
+                                >
+                                <span class="list-item-desc"
+                                    >этно–фанк, архаично-академические
+                                    эксперименты</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title"
+                                    >backtodaroots</span
+                                >
+                                <span class="list-item-desc"
+                                    >аналоговый регги-джаз c речитативом</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title">shaggy</span>
+                                <span class="list-item-desc"
+                                    >кассеты, diy синтезаторы, филд
+                                    рекординг</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title">step rock</span>
+                                <span class="list-item-desc"
+                                    >бонго и джембе, пандейро и флейта,
+                                    варган</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title">pank</span>
+                                <span class="list-item-desc"
+                                    >глитчи басс и брейк, лоу-фи с элементами
+                                    хоррора</span
+                                >
+                            </li>
+                            <li class="list-item">
+                                <span class="list-item-title">yasya</span>
+                                <span class="list-item-desc">дроун нойз</span>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section class="list-section" id="films">
+                        <h2>фильмы</h2>
+                        <ul class="item-list">
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0243017/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Пробуждение жизни (Waking Life)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Ричард Линклейтер, 2001</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0071853/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Святая гора (The Holy Mountain)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Алехандро Ходоровски, 1973</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0358300/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Великие йоги тибета (The Yogis of
+                                        Tibet)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >JEHM film, 2002</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt2126496/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Дыхание Богов (Breath of the
+                                        Gods)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Ян Шмидт-Гарре, 2012</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt1342971/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >В поисках Древнего Тибета</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Томас Шмидт, 2010</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0274152/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Законы солнца (The Laws of the
+                                        Sun)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Group TAC, 2000</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt1701977/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Сияющая луна (Brilliant Moon)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Дилго Кхьенце Ринпоче, 2010</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0085809/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Кояанискаци (Koyaanisqatsi)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Годфри Реджио, 1982</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0114589/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Синтетические удовольствия</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Иара Ли, 1996</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0084628/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Без солнца (Sans Soleil)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Крис Маркер, 1982</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0770802/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Самсара (Samsara)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Рон Фрике, 2011</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0103767/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Барака (Baraka)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Рон Фрике, 1992</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0141566/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >МЦСЛ (Lucky People Center)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >1998, Швеция</span
+                                    >
+                                </a>
+                            </li>
+                            <li class="list-item">
+                                <a
+                                    href="https://www.imdb.com/title/tt0137523/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <span class="list-item-title"
+                                        >Бойцовский клуб (Fight Club)</span
+                                    >
+                                    <span class="list-item-desc"
+                                        >Дэвид Финчер, 1999</span
+                                    >
+                                </a>
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+
         <script>
-            const container = document.getElementById("scheduleContainer");
-            document.getElementById("nextDay").onclick = () =>
-                container.scrollBy({
-                    left: window.innerWidth - 64,
-                    behavior: "smooth",
+            function openModal(id) {
+                document.getElementById(id).classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
+            function closeModal(id) {
+                document.getElementById(id).classList.remove("active");
+                document.body.style.overflow = "";
+            }
+
+            // Close on clicking outside
+            document.querySelectorAll(".modal-overlay").forEach((overlay) => {
+                overlay.addEventListener("mousedown", (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove("active");
+                        document.body.style.overflow = "";
+                    }
                 });
-            document.getElementById("prevDay").onclick = () =>
-                container.scrollBy({
-                    left: -(window.innerWidth - 64),
-                    behavior: "smooth",
-                });
+            });
         </script>
     </body>
 </html>
