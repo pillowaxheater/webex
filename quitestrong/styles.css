@@ -25,6 +25,10 @@ body {
     line-height: 1.5;
     padding: 0;
     -webkit-font-smoothing: antialiased;
+    /* Disable scroll on main view and fix to screen size */
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
 }
 
 a {
@@ -34,37 +38,43 @@ a {
 
 /* ── Landing Page ────────────────────────────────────────── */
 .landing {
-    min-height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1rem;
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
+    position: relative;
 }
 
 .poster-wrap {
     width: 100%;
     max-width: 380px;
-    margin-bottom: 2rem;
+    max-height: 45vh; /* Prevent overflowing small screens */
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .poster {
-    width: 100%;
-    height: auto;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
     mix-blend-mode: multiply;
     filter: url(#threshold);
 }
 
 .description-block {
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
     color: var(--dim);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     max-width: 500px;
-    line-height: 1.6;
+    line-height: 1.4;
+    padding: 0 1rem;
 }
 
 .action-links {
@@ -93,6 +103,19 @@ a {
     opacity: 0.7;
 }
 
+.footer-copy {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    width: 100%;
+    text-align: center;
+}
+
 /* ── Modals ──────────────────────────────────────────────── */
 .modal-overlay {
     position: fixed;
@@ -105,7 +128,8 @@ a {
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1.5rem;
+    /* Re-enable scrolling inside modals if content overflows */
     overflow-y: auto;
 }
 
@@ -116,13 +140,14 @@ a {
 .modal-content {
     background: #fff;
     border: 1px solid var(--border);
-    padding: 3rem;
+    padding: 2.5rem;
     width: 100%;
     max-width: 600px;
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    text-align: left;
 }
 
 .modal-content.modal-large {
