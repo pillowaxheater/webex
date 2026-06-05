@@ -1,9 +1,9 @@
 :root {
-    --bg: #fdfdfd;
-    --fg: #000;
-    --accent: #000;
-    --dim: rgba(0, 0, 0, 0.45);
-    --border: rgba(0, 0, 0, 0.08);
+    --bg: hsl(0, 0%, 99.2%);
+    --fg: hsl(0, 0%, 4%);
+    --accent: hsl(0, 0%, 4%);
+    --dim: hsl(0, 0%, 45%);
+    --border: hsl(0, 0%, 90%);
 }
 
 * {
@@ -29,7 +29,8 @@ body {
     padding: 0;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 a {
@@ -58,7 +59,7 @@ a {
 
 .poster-wrap {
     width: 100%;
-    max-width: 320px;
+    max-width: 480px;
     flex: 0 1 auto;
     display: flex;
     justify-content: center;
@@ -68,7 +69,7 @@ a {
 
 .poster {
     width: 100%;
-    max-height: 40vh;
+    max-height: 60vh;
     object-fit: contain;
     mix-blend-mode: multiply;
     filter: url(#threshold);
@@ -78,9 +79,10 @@ a {
     margin-bottom: 3rem;
     color: var(--dim);
     font-size: 0.85rem;
-    max-width: 500px;
+    width: 100%;
+    max-width: 480px;
     line-height: 1.5;
-    text-align: center;
+    text-align: justify;
 }
 
 .action-links {
@@ -95,18 +97,41 @@ a {
     border: none;
     font-family: inherit;
     font-size: 1.05rem;
-    font-weight: 700;
+    font-weight: 400;
     text-transform: lowercase;
     color: var(--fg) !important;
     cursor: pointer;
     padding: 0;
     letter-spacing: 0.05em;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-link:after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--fg);
+    transform-origin: 100% 100%;
+    transform: scaleX(0);
+    transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        background-color 0.3s;
 }
 
 .nav-link:hover {
-    opacity: 0.7;
+    color: var(--dim) !important;
+}
+
+.nav-link:hover:after {
+    transform-origin: 0 100%;
+    transform: scaleX(1);
+    background-color: var(--dim);
 }
 
 .footer-copy {
@@ -126,7 +151,9 @@ a {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(253, 253, 253, 0.95);
+    background: rgba(253, 253, 253, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 100;
     display: none;
     align-items: center;
@@ -139,22 +166,37 @@ a {
     display: flex;
 }
 
+.modal-overlay.active .modal-content {
+    animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 /* Specifically for payment modal to sit above others */
 #modal-payment {
     z-index: 200;
-    background: rgba(253, 253, 253, 0.98);
+    background: rgba(253, 253, 253, 0.9);
 }
 
 .modal-content {
-    background: #fff;
-    border: 1px solid var(--border);
-    padding: 2.5rem;
+    background: var(--bg);
+    border: none;
+    padding: 2rem;
     width: 100%;
     max-width: 600px;
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
     text-align: left;
 }
 
@@ -197,7 +239,7 @@ a {
     color: var(--fg);
     margin-bottom: 1rem;
     text-transform: lowercase;
-    font-weight: 800;
+    font-weight: 500;
     letter-spacing: 0.05em;
 }
 
@@ -226,7 +268,7 @@ a {
     font-size: 1.1rem;
     text-transform: lowercase;
     margin-bottom: 0.5rem;
-    font-weight: 800;
+    font-weight: 500;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border);
 }
@@ -251,7 +293,7 @@ a {
 }
 
 .ticket-schedule .time {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 0.8rem;
     flex: 0 0 2.5rem;
 }
@@ -262,16 +304,18 @@ a {
 }
 
 .buy-btn {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
     text-align: center;
     background: var(--accent);
-    color: #fff !important;
+    color: var(--bg) !important;
     padding: 1rem;
-    font-weight: 700;
+    font-weight: 500;
     text-transform: lowercase;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     text-decoration: none !important;
     border: none;
     cursor: pointer;
@@ -313,7 +357,7 @@ a {
 }
 
 .list-item-title {
-    font-weight: 800;
+    font-weight: 500;
     display: block;
     line-height: 1.2;
     text-transform: uppercase;
@@ -327,7 +371,7 @@ a {
     font-size: 0.8rem;
     color: var(--dim);
     margin-top: 0.25rem;
-    font-weight: 600;
+    font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
