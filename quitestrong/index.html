@@ -14,35 +14,49 @@
     </head>
     <body>
         <main class="landing">
-            <div class="poster-wrap">
-                <img src="hero.png" alt="тихая сила" class="poster" />
+            <div class="landing-content">
+                <div class="poster-wrap">
+                    <img src="hero.png" alt="тихая сила" class="poster" />
+                </div>
+
+                <div class="description-block">
+                    <p>
+                        горящий тур этого лета в пространство качественного
+                        состояния. 21 июня стартует недельный фестиваль Тихая
+                        Сила, посвященный восстановлению нервной системы через
+                        погружение в покой внутри и вне себя. Ты устал от шума,
+                        скорости и постоянного напряжения? заглядывай и исследуй
+                        как восстановить контакт собой, перестать жить на
+                        автомате и вернуть себе ясность мышления. В программе –
+                        семь дней цифрового детокса и трансплантации знаний на
+                        зеленой траве, пять дней обучения цигун, два дня
+                        ретрита, два вечера с музыкой и фильмами для всех друзей
+                        и подруг.
+                    </p>
+                </div>
+
+                <nav class="action-links">
+                    <button
+                        class="nav-link"
+                        onclick="openModal('modal-tickets')"
+                    >
+                        билеты
+                    </button>
+                    <a
+                        href="https://vk.com/velo_atelie"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="nav-link"
+                        >локация</a
+                    >
+                    <button
+                        class="nav-link"
+                        onclick="openModal('modal-program')"
+                    >
+                        программа
+                    </button>
+                </nav>
             </div>
-
-            <div class="description-block">
-                <p>
-                    это не актуальная информация<br />
-                    я позвонила уточнила еще раз - комиссия там только с меня
-                    10%. и через личный кабинет я могу настроить цену на эти 10%
-                    больше для покупателя либо оставить на себя.
-                </p>
-            </div>
-
-            <nav class="action-links">
-                <button class="nav-link" onclick="openModal('modal-tickets')">
-                    билеты
-                </button>
-                <a
-                    href="https://instagram.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="nav-link"
-                    >локация</a
-                >
-                <button class="nav-link" onclick="openModal('modal-program')">
-                    программа
-                </button>
-            </nav>
-
             <div class="footer-copy">© 2026 тихая сила</div>
         </main>
 
@@ -52,6 +66,22 @@
                 <button class="close-btn" onclick="closeModal('modal-tickets')">
                     ✕
                 </button>
+
+                <div class="modal-intro">
+                    <p>
+                        существует три варианта посещения пространства
+                        качественного состояния – погрузиться полностью и
+                        освоить первую ступенью развивающей системы чжун юань
+                        цигун; выделить выходной на ретрит с практиками; заехать
+                        на вечерний ритуал.
+                    </p>
+                    <p>
+                        полное погружение 21 - 27 июня<br />
+                        выходной ретрит 26 - 27 июня<br />
+                        трибал ритуал 27 июня
+                    </p>
+                </div>
+
                 <div class="tickets-grid">
                     <div class="ticket-col">
                         <h3>полное погружение</h3>
@@ -96,13 +126,12 @@
                                 <span class="desc">расход</span>
                             </li>
                         </ul>
-                        <a
-                            href="https://prodamus.ru/"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
                             class="buy-btn"
-                            >купить билет (5000р)</a
+                            onclick="openModal('modal-payment')"
                         >
+                            купить билет (5000р)
+                        </button>
                     </div>
 
                     <div class="ticket-col">
@@ -136,13 +165,12 @@
                                 <span class="desc">расход</span>
                             </li>
                         </ul>
-                        <a
-                            href="https://prodamus.ru/"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
                             class="buy-btn"
-                            >купить билет (2000р)</a
+                            onclick="openModal('modal-payment')"
                         >
+                            купить билет (2000р)
+                        </button>
                     </div>
 
                     <div class="ticket-col">
@@ -162,14 +190,48 @@
                                 <span class="desc">конец</span>
                             </li>
                         </ul>
-                        <a
-                            href="https://prodamus.ru/"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
                             class="buy-btn"
-                            >купить билет (1000р)</a
+                            onclick="openModal('modal-payment')"
                         >
+                            купить билет (1000р)
+                        </button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nested Modal: Payment Options -->
+        <div class="modal-overlay" id="modal-payment">
+            <div class="modal-content modal-small">
+                <button class="close-btn" onclick="closeModal('modal-payment')">
+                    ✕
+                </button>
+                <h3 style="margin-bottom: 2rem; font-size: 1rem">
+                    выберите способ оплаты
+                </h3>
+                <div class="payment-options">
+                    <a
+                        href="https://prodamus.ru/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="buy-btn"
+                        >QR</a
+                    >
+                    <a
+                        href="https://prodamus.ru/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="buy-btn"
+                        >Карта РФ / СБП</a
+                    >
+                    <a
+                        href="https://prodamus.ru/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="buy-btn"
+                        >Карта не РФ</a
+                    >
                 </div>
             </div>
         </div>
@@ -181,6 +243,25 @@
                     ✕
                 </button>
                 <div class="program-content">
+                    <div class="modal-intro">
+                        <img
+                            src="program.png"
+                            alt="программа"
+                            class="program-img"
+                        />
+                        <h2>программа</h2>
+                        <p>
+                            в программе фестиваля – активности, направленные на
+                            регуляцию нервной системы и расширение познания. в
+                            ходе практик гости фестиваля освоят навыки
+                            саморегуляции – научатся контактировать с телом,
+                            приводить ум в состояние покоя, смогут
+                            концентрировать и разряжать внимание, разовьют
+                            психологическую устойчивость. тихая сила останется с
+                            учениками на всю жизнь.
+                        </p>
+                    </div>
+
                     <section class="list-section" id="audio-spa">
                         <h2>аудиальный спа</h2>
                         <ul class="item-list">
@@ -456,11 +537,9 @@
         <script>
             function openModal(id) {
                 document.getElementById(id).classList.add("active");
-                document.body.style.overflow = "hidden";
             }
             function closeModal(id) {
                 document.getElementById(id).classList.remove("active");
-                document.body.style.overflow = "";
             }
 
             // Close on clicking outside
@@ -468,7 +547,6 @@
                 overlay.addEventListener("mousedown", (e) => {
                     if (e.target === overlay) {
                         overlay.classList.remove("active");
-                        document.body.style.overflow = "";
                     }
                 });
             });
